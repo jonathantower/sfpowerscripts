@@ -21,6 +21,7 @@ pr:
 trigger:
   branches:
     include:
+     - develop
      - feature/*
      - hoftix/*
      - bugfix/*
