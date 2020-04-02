@@ -12,19 +12,33 @@ pr:
     include:
     - develop
     - master
+  paths:
+    include:
+      - '*' 
+    exclude:
+      - 'docs/*' 
 
 trigger:
-  - feature/*
-  - hoftix/*
-  - bugfix/*
+  branches:
+    include:
+     - develop
+     - feature/*
+     - hoftix/*
+     - bugfix/*
+  paths:
+    include:
+    - '*' 
+    exclude:
+    - 'docs/*' 
 
 
 variables:
  - group: Tokens
  - name: major
-   value: 10
+   value: 11
+   
  - name: minor
-   value: $[counter(variables['major'], 30)]
+   value: $[counter(variables['major'], 200)] # Teporarily counter increased to 200 for issue with review builds
  
 
 
@@ -87,18 +101,6 @@ stages:
       directory: 'force-di'
       service_connection: $(devhub_service_connection)
     
-    #Currently not available
-  #  - job: MergeBranchToDevelop
-  #    displayName: 'Wait for code to be merged to develop branch'
-  #    dependsOn: 
-  #      - TestPrOnWindows
-  #      - TestPrOnLinux
-  #    pool: server
-  #    steps:
-  #     - task: ManualIntervention@8
-  #       inputs:
-  #         instructions: 'Merge feature/bugfix branch to develop'
-  #         emailRecipients: 'azlam.salam@outlook.com'
 
 - stage: Beta
   dependsOn: []
@@ -115,12 +117,29 @@ stages:
       toBuild: true
       organization: dxatscale
       buildNumber: $(minor)
-      
-
+ 
+#For now use Beta Environment for Hotfix
+- stage: Hotfix
+  dependsOn: []
+  condition: and(eq(variables['build.sourceBranch'], 'refs/heads/master'), ne(variables['build.Reason'], 'PullRequest') )
+  jobs:
+   - template: templates/buildplugins.yml   #Build Template
+     parameters:
+      name: 'DeployToHotfix'
+      commitToGit: true
+      branchToDeploy: 'master'
+      stageToDeploy: 'beta'
+      version: 'beta'
+      environmentToDeploy: 'beta'
+      toBuild: true
+      organization: dxatscale
+      buildNumber: $(minor)
 
 - stage: Production
-  dependsOn: Beta
-  condition: or(eq(variables['build.sourceBranch'], 'refs/heads/develop'), eq(variables['build.Reason'], 'Schedule'), eq(variables['build.Reason'], 'Manual'))
+  dependsOn: 
+          - Beta
+          - Hotfix 
+  condition: or ( succeeded('Beta'), succeeded('Hotfix'))
   jobs:
    - template: templates/buildplugins.yml   #Build Template
      parameters:
