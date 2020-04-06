@@ -55,14 +55,21 @@ async function run() {
     tl.debug(`Command Generated ${command}`);
     await createDeltaPackageImp.exec(command);
 
+    let taskType = tl.getVariable("Release.ReleaseId") ? "Release" : "Build";
+    let artifactFilePath: string = "";
 
-    let artifactFilePath = path.join(
-      tl.getVariable("build.repository.localpath"),
-      `${sfdx_package}_src_delta`
-    );
+    if (taskType == "Build") {
+      artifactFilePath = path.join(tl.getVariable("build.repository.localpath"),`${sfdx_package}_src_delta`);
+    }
+    else
+    {
+      artifactFilePath = path.join(projectDirectory,`${sfdx_package}_src_delta`);
+      console.log(artifactFilePath);
+    }
+
     tl.setVariable("sfpowerscripts_delta_package_path", artifactFilePath);
 
-    if (build_artifact_enabled) {
+    if (build_artifact_enabled && taskType == "Build") {
   
    
       //Write Artifact  Delta
