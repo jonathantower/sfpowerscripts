@@ -7,9 +7,9 @@
   "category": "Build",
   "author": "azlam.abdulsalam",
   "version": {
-    "Major": 2,
+    "Major": 3,
     "Minor": 0,
-    "Patch": 5
+    "Patch": 0
   },
   "instanceNameFormat": "Create Delta Package based on two commits",
   "inputs": [
