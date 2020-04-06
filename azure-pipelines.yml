@@ -1,4 +1,4 @@
-name: Milestone11$(Rev:.r)
+name: Milestone12$(Rev:.r)
 
 resources:
   repositories:
@@ -35,7 +35,7 @@ trigger:
 variables:
  - group: Tokens
  - name: major
-   value: 11
+   value: 12
    
  - name: minor
    value: $[counter(variables['major'], 200)] # Teporarily counter increased to 200 for issue with review builds

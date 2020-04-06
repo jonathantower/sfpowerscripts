@@ -7,9 +7,9 @@
   "category": "Build",
   "author": "azlam.abdulsalam",
   "version": {
-    "Major": 2,
+    "Major": 3,
     "Minor": 0,
-    "Patch": 5
+    "Patch": 0
   },
   "instanceNameFormat": "Create Delta Package based on two commits",
   "inputs": [
@@ -60,14 +60,6 @@
       "defaultValue": false,
       "required": false,
       "helpMarkDown": "Check this option to generate a destructive manifest to be deployed"
-    },
-    {
-      "name": "project_directory",
-      "type": "string",
-      "label": "Revision To",
-      "defaultValue": "",
-      "required": false,
-      "helpMarkDown": "The project directory should contain a sfdx-project.json for this command to succeed"
     },
     {
       "name": "set_build_name",
