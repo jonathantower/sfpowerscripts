@@ -7,7 +7,7 @@ import {
   readdirSync,
   fstat,
   existsSync,
-  stat
+  stat,
 } from "fs";
 import { isNullOrUndefined } from "util";
 import { onExit } from "../Common/OnExit";
@@ -20,20 +20,24 @@ export interface DeploySourceResult {
 }
 
 export default class DeploySourceToOrgImpl {
+  temp_folder: string;
+
   public constructor(
     private target_org: string,
     private project_directory: string,
     private source_directory: string,
     private deployment_options: any,
     private isToBreakBuildIfEmpty: boolean
-  ) {}
+  ) {
+    this.temp_folder = `${this.makefolderid(5)}_mdapi`;
+  }
 
   public async exec(): Promise<DeploySourceResult> {
     let commandExecStatus: boolean = false;
     let deploySourceResult = {} as DeploySourceResult;
 
     //Clean mdapi directory
-    rimraf.sync("sfpowerscripts_mdapi");
+    rimraf.sync(this.temp_folder);
 
     //Check empty conditions
     let status = this.isToBreakBuildForEmptyDirectory();
@@ -54,11 +58,11 @@ export default class DeploySourceToOrgImpl {
       if (this.deployment_options["checkonly"])
         copyFileSync(
           this.deployment_options["validation_ignore"],
-          path.join(this.project_directory,'.forceignore')
+          path.join(this.project_directory, ".forceignore")
         );
     } catch (err) {
       //Do something here
-      console.error(err);
+
       console.log("Validation Ignore not found, using .forceignore");
     }
 
@@ -69,7 +73,7 @@ export default class DeploySourceToOrgImpl {
       console.log(command);
       let result = child_process.execSync(command, {
         cwd: this.project_directory,
-        encoding: "utf8"
+        encoding: "utf8",
       });
 
       let resultAsJSON = JSON.parse(result);
@@ -98,7 +102,7 @@ export default class DeploySourceToOrgImpl {
           {
             cwd: this.project_directory,
             encoding: "utf8",
-            stdio: ["pipe", "pipe", "ignore"]
+            stdio: ["pipe", "pipe", "ignore"],
           }
         );
       } catch (err) {
@@ -142,7 +146,7 @@ export default class DeploySourceToOrgImpl {
     let directoryToCheck;
     let status: { message: string; result: string } = {
       message: "",
-      result: ""
+      result: "",
     };
 
     if (!isNullOrUndefined(this.project_directory)) {
@@ -195,7 +199,7 @@ export default class DeploySourceToOrgImpl {
         (error, stdout, stderr) => {}
       );
 
-      child.stdout.on("data", data => {
+      child.stdout.on("data", (data) => {
         messageString += data.toString();
       });
 
@@ -214,7 +218,7 @@ export default class DeploySourceToOrgImpl {
     if (this.deployment_options["checkonly"]) command += ` -c`;
 
     //directory
-    command += ` -d sfpowerscripts_mdapi`;
+    command += ` -d ${this.temp_folder}`;
 
     //add json
     command += ` --json`;
@@ -270,7 +274,7 @@ export default class DeploySourceToOrgImpl {
           `Converting to Source Format ${this.source_directory} in project directory`
         );
       child_process.execSync(
-        `npx sfdx force:source:convert -r ${this.source_directory}  -d  sfpowerscripts_mdapi`,
+        `npx sfdx force:source:convert -r ${this.source_directory}  -d ${this.temp_folder}`,
         { cwd: this.project_directory, encoding: "utf8" }
       );
       console.log("Converting to Source Format Completed");
@@ -284,5 +288,16 @@ export default class DeploySourceToOrgImpl {
     let files: string[] = readdirSync(source_directory);
     if (files == null || files.length === 0) return true;
     else return false;
+  }
+
+  private makefolderid(length): string {
+    var result = "";
+    var characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
   }
 }
