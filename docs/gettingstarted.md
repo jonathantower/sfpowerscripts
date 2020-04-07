@@ -22,7 +22,7 @@ Here is how to get started with SFPowerscripts, if you want to explore the whole
 
 7\. Choose URL and mention the following url&nbsp;
 
-[https://github.com/azlamsalam/sfpowerscripts/releases/download/10.0.50/sfpowerscripts-sample-pipelines.zip](https://github.com/azlamsalam/sfpowerscripts/releases/download/10.0.50/sfpowerscripts-sample-pipelines.zip)
+[sfpowerscripts sample pipelines](https://github.com/azlamsalam/sfpowerscripts/releases/download/11.0.59/sfpowerscripts-sample-pipelines.zip)
 
 ![](/uploads/gettingstarted-samplepipelines.PNG){: width="1906" height="549"}
 

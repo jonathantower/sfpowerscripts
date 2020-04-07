@@ -16,7 +16,9 @@ This task utilizes the sfpowerkit:project:diff. In case you face any issues with
 
 id: sfpwowerscripts-createdeltapackage-task
 
+
 version: 3.0.0
+
 
 **Input Variables&nbsp; - Visual Designer Labels (Yaml variables)**
 
@@ -74,6 +76,7 @@ None
 &nbsp;
 
 **Changelog**
+
 
 * 3.0.0 Support for this task in release pipelines
 * 2.0.5 Support for creation of multiple packages in a single build such as in a MonoRepo

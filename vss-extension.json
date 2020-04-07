@@ -459,5 +459,6 @@
                 "name": "BuildTasks/CreateDeltaPackageTask"
             }
         }
-    ]
+    ],
+    "baseUri": "https://localhost:3000/build/"
 }

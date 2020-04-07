@@ -151,7 +151,6 @@ updateExtensionManifest = function(dir, options) {
     manifest.name = "sfpowerscripts" + " (" + "review" + ")";
     manifest.public = false;
     version = options.version;
-    
     delete manifest['baseUri'];
 
   } else if (options.stage == "beta") {
@@ -160,9 +159,7 @@ updateExtensionManifest = function(dir, options) {
     manifest.name = "sfpowerscripts" + " (" + "beta" + ")";
     manifest.public = false;
     version = options.version;
-
     delete manifest['baseUri'];
-
   } else {
     manifest.id = "sfpowerscripts";
     manifest.name = "sfpowerscripts";
