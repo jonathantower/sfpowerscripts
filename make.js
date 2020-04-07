@@ -151,17 +151,25 @@ updateExtensionManifest = function(dir, options) {
     manifest.name = "sfpowerscripts" + " (" + "review" + ")";
     manifest.public = false;
     version = options.version;
+    
+    delete manifest['baseUri'];
+
   } else if (options.stage == "beta") {
     manifest.version = options.version;
     manifest.id = "sfpowerscripts" + "-" + "beta";
     manifest.name = "sfpowerscripts" + " (" + "beta" + ")";
     manifest.public = false;
     version = options.version;
+
+    delete manifest['baseUri'];
+
   } else {
     manifest.id = "sfpowerscripts";
     manifest.name = "sfpowerscripts";
     manifest.public = true;
     version = manifest.version;
+
+    delete manifest['baseUri'];
   }
 
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 4));
